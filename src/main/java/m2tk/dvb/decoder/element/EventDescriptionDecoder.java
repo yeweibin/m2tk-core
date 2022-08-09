@@ -21,7 +21,7 @@ import m2tk.encoding.Encoding;
 
 public class EventDescriptionDecoder extends Decoder
 {
-    protected EventDescriptionDecoder()
+    public EventDescriptionDecoder()
     {
         super(EventDescriptionDecoder.class.getSimpleName());
     }

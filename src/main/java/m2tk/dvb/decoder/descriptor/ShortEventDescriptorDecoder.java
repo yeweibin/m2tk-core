@@ -15,6 +15,7 @@
  */
 package m2tk.dvb.decoder.descriptor;
 
+import m2tk.dvb.DVB;
 import m2tk.encoding.Encoding;
 import m2tk.mpeg2.decoder.DescriptorDecoder;
 
@@ -31,8 +32,24 @@ public class ShortEventDescriptorDecoder extends DescriptorDecoder
         return (super.isAttachable(target) && target.readUINT8(0) == 0x4D);
     }
 
-    public Encoding getEventNameDescription()
+    public String getLanguageCode()
     {
-        return encoding.readSelector(2, encoding.size() - 2);
+        int code = encoding.readUINT24(2);
+        return DVB.decodeThreeLetterCode(code);
+    }
+
+    public String getEventName()
+    {
+        int len = encoding.readUINT8(5);
+        return DVB.decodeString(encoding.getRange(6, len));
+    }
+
+    public String getEventDescription()
+    {
+        int len = encoding.readUINT8(5);
+        int offset = 6 + len;
+        len = encoding.readUINT8(offset);
+        offset += 1;
+        return DVB.decodeString(encoding.getRange(offset, len));
     }
 }

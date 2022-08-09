@@ -21,7 +21,7 @@ import m2tk.encoding.Encoding;
 
 public class ServiceDescriptionDecoder extends Decoder
 {
-    protected ServiceDescriptionDecoder()
+    public ServiceDescriptionDecoder()
     {
         super(ServiceDescriptionDecoder.class.getSimpleName());
     }
