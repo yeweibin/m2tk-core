@@ -40,16 +40,18 @@ public class ShortEventDescriptorDecoder extends DescriptorDecoder
 
     public String getEventName()
     {
-        int len = encoding.readUINT8(5);
-        return DVB.decodeString(encoding.getRange(6, len));
+        int from = 6;
+        int to = 6 + encoding.readUINT8(5);
+        byte[] chars = encoding.getRange(from, to);
+        return DVB.decodeString(chars);
     }
 
     public String getEventDescription()
     {
-        int len = encoding.readUINT8(5);
-        int offset = 6 + len;
-        len = encoding.readUINT8(offset);
-        offset += 1;
-        return DVB.decodeString(encoding.getRange(offset, len));
+        int offset = 6 + encoding.readUINT8(5);
+        int from = offset + 1;
+        int to = from + encoding.readUINT8(offset);
+        byte[] chars = encoding.getRange(from, to);
+        return DVB.decodeString(chars);
     }
 }

@@ -324,14 +324,17 @@ public final class DVB
 
         int first_byte = bytes[offset] & 0xFF;
 
-        if (first_byte == 0x13 || first_byte >= 0x20)
+        if (first_byte == 0x11)
             return construct_string_safely(bytes, offset + 1, length - 1, "GBK");
 
-        if (first_byte == 0x11)
-            return construct_string_safely(bytes, offset + 1, length - 1, "Unicode");
+        if (first_byte == 0x13)
+            return construct_string_safely(bytes, offset + 1, length - 1, "GB2312");
 
-        // 对于其他字符集，返回原始字节编码。
-        return Bytes.toHexString(bytes, offset, length);
+        if (first_byte == 0x15)
+            return construct_string_safely(bytes, offset + 1, length - 1, "UTF-8");
+
+        // 对于其他字符集，按GBK方式解码。
+        return new String(bytes, offset, length, Charset.forName("GBK"));
     }
 
     public static int encodeString(String string, byte[] bytes, int offset)
