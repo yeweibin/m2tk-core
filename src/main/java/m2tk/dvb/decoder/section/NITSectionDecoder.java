@@ -55,7 +55,7 @@ public class NITSectionDecoder extends PSISectionDecoder
     public Encoding[] getTransportStreamDescriptionList()
     {
         ArrayList<Encoding> list = new ArrayList<>();
-        int from = 10 + (encoding.readUINT16(8) & 0xFFF);
+        int from = 10 + (encoding.readUINT16(8) & 0xFFF) + 2;
         int to = encoding.size() - MPEG2.CHECKSUM_LENGTH;
         while (from < to)
         {
@@ -69,7 +69,7 @@ public class NITSectionDecoder extends PSISectionDecoder
     public void forEachTransportStreamDescription(Consumer<Encoding> consumer)
     {
         Objects.requireNonNull(consumer);
-        int from = 10 + (encoding.readUINT16(8) & 0xFFF);
+        int from = 10 + (encoding.readUINT16(8) & 0xFFF) + 2;
         int to = encoding.size() - MPEG2.CHECKSUM_LENGTH;
         while (from < to)
         {
