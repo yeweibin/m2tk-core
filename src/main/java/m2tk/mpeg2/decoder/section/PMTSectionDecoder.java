@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) Ye Weibin. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package m2tk.mpeg2.decoder.section;
+
+import m2tk.encoding.Encoding;
+import m2tk.mpeg2.MPEG2;
+import m2tk.mpeg2.decoder.PSISectionDecoder;
+
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.function.Consumer;
+
+public class PMTSectionDecoder extends PSISectionDecoder
+{
+    public PMTSectionDecoder()
+    {
+        super(PMTSectionDecoder.class.getSimpleName());
+    }
+
+    @Override
+    public boolean isAttachable(Encoding target)
+    {
+        return (super.isAttachable(target) && target.readUINT8(0) == 0x02);
+    }
+
+    public int getProgramNumber()
+    {
+        return getTableIDExtension();
+    }
+
+    public int getProgramClockReferencePID()
+    {
+        int position = 8;
+        return encoding.readUINT16(position) & MPEG2.PID_MASK;
+    }
+
+    public Encoding getDescriptorLoop()
+    {
+        int length = encoding.readUINT16(10) & 0xFFF;
+        return encoding.readSelector(12, length);
+    }
+
+    public Encoding[] getProgramElementList()
+    {
+        ArrayList<Encoding> list = new ArrayList<>();
+        int from = 12 + (encoding.readUINT16(10) & 0xFFF);
+        int to   = encoding.size() - MPEG2.CHECKSUM_LENGTH;
+        while (from < to)
+        {
+            int length = 5 + (encoding.readUINT16(from + 3) & 0xFFF);
+            list.add(encoding.readSelector(from, length));
+            from += length;
+        }
+        return list.toArray(new Encoding[0]);
+    }
+
+    public void forEachProgramElement(Consumer<Encoding> consumer)
+    {
+        Objects.requireNonNull(consumer);
+        int from = 12 + (encoding.readUINT16(10) & 0xFFF);
+        int to   = encoding.size() - MPEG2.CHECKSUM_LENGTH;
+        while (from < to)
+        {
+            int length = 5 + (encoding.readUINT16(from + 3) & 0xFFF);
+            Encoding element = encoding.readSelector(from, length);
+            consumer.accept(element);
+            from += length;
+        }
+    }
+}
