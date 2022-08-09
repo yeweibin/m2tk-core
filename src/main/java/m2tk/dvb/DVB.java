@@ -181,15 +181,13 @@ public final class DVB
         return String.format("%02d:%02d:%02d", hh, mm, ss);
     }
 
-    public static Duration decodeDuration(int fields)
+    public static int decodeDuration(int duration)
     {
-        int seconds = decode_time_fields(fields);
-        return Duration.ofSeconds(seconds);
+        return decode_time_fields(duration);
     }
 
-    public static int encodeDuration(Duration duration)
+    public static int encodeDuration(int seconds)
     {
-        int seconds = (int) duration.getSeconds();
         return encode_time_fields(seconds);
     }
 
@@ -327,10 +325,10 @@ public final class DVB
         int first_byte = bytes[offset] & 0xFF;
 
         if (first_byte == 0x13 || first_byte >= 0x20)
-            return construct_string_safely(bytes, offset, length, "GBK");
+            return construct_string_safely(bytes, offset + 1, length - 1, "GBK");
 
         if (first_byte == 0x11)
-            return construct_string_safely(bytes, offset, length, "Unicode");
+            return construct_string_safely(bytes, offset + 1, length - 1, "Unicode");
 
         // 对于其他字符集，返回原始字节编码。
         return Bytes.toHexString(bytes, offset, length);
