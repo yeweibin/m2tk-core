@@ -95,13 +95,14 @@ public final class ProgramClockReference
 
     public static int[] toTimeline(long pcr)
     {
-        int[] time = new int[4];
+        int[] time = new int[5];
         int sec = (int) (pcr / MPEG2.SYSTEM_CLOCK_FREQUENCY);
         int msc = (int) (pcr * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY % 1000);
-        time[0] = sec / 3600;
-        time[1] = sec % 3600 / 60;
-        time[2] = sec % 60;
-        time[3] = msc;
+        time[0] = sec / 86400; // dd
+        time[1] = sec % 86400 / 3600;  // hh
+        time[2] = sec % 3600 / 60;  // mm
+        time[3] = sec % 60; // ss
+        time[4] = msc;  // ms
         return time;
     }
 
@@ -109,10 +110,11 @@ public final class ProgramClockReference
     {
         int sec = (int) (pcr / MPEG2.SYSTEM_CLOCK_FREQUENCY);
         int msc = (int) (pcr * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY % 1000);
-        int hh = sec / 3600;
+        int dd = sec / 86400;
+        int hh = sec % 86400 / 3600;
         int mm = sec % 3600 / 60;
         int ss = sec % 60;
-        return String.format("%dh%dm%ds%03d", hh, mm, ss, msc);
+        return String.format("%02d:%02d:%02d:%02d.%03d", dd, hh, mm, ss, msc);
     }
 
     public long value()
