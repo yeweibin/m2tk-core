@@ -56,4 +56,12 @@ public abstract class Decoder
     {
         encoding = null;
     }
+
+    @Override
+    public String toString()
+    {
+        return (encoding == null)
+               ? "Decoder{" + name + "}"
+               : encoding.toHexString();
+    }
 }
