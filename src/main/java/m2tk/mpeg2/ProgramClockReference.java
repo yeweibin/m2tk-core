@@ -71,6 +71,28 @@ public final class ProgramClockReference
         return (int) (interval * MPEG2.TS_PACKET_BIT_SIZE * MPEG2.SYSTEM_CLOCK_FREQUENCY / (second - first));
     }
 
+    public static int intervalMillis(ProgramClockReference first, ProgramClockReference second)
+    {
+        return intervalMillis(first.value(), second.value());
+    }
+
+    public static int intervalMillis(long first, long second)
+    {
+        if (first == second)
+            throw new IllegalArgumentException("invalid pcr value: first(" + first + "), second(" + second + ")");
+
+        if (first > second)
+        {
+            // PCR wrap round
+            long base = ((second / 300) & 0x1FFFFFFFFL) + 0x200000000L;
+            long extension = ((second % 300) & 0x1FFL);
+            second = base * 300 + extension;
+        }
+
+        return (int) ((second - first) * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY);
+    }
+
+
     public static int[] toTimeline(long pcr)
     {
         int[] time = new int[4];
