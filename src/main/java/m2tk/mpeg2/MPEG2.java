@@ -69,7 +69,8 @@ public final class MPEG2
     public static final int USER_PRIVATE_STREAM_TYPE = 0x80;
     public static final int MIN_TABLE_ID = 0x00;
     public static final int MAX_TABLE_ID = 0xFF;
-    public static final int SYSTEM_CLOCK_FREQUENCY = 27000000;
+    public static final int SYSTEM_CLOCK_FREQUENCY_HZ = 27_000_000;
+    public static final int SYSTEM_CLOCK_FREQUENCY_MHZ = 27;
 
     // Stream Types
     public static final int RESERVED_STREAM_TYPE = 0x00;

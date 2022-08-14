@@ -50,33 +50,12 @@ public final class ProgramClockReference
 
     public static int bitrate(ProgramClockReference first,
                               ProgramClockReference second,
-                              long interval)
+                              long packets)
     {
-        return bitrate(first.value(), second.value(), interval);
+        return bitrate(first.value(), second.value(), packets);
     }
 
-    public static int bitrate(long first, long second, long interval)
-    {
-        if (first == second)
-            throw new IllegalArgumentException("invalid pcr value: first(" + first + "), second(" + second + ")");
-
-        if (first > second)
-        {
-            // PCR wrap round
-            long base = ((second / 300) & 0x1FFFFFFFFL) + 0x200000000L;
-            long extension = ((second % 300) & 0x1FFL);
-            second = base * 300 + extension;
-        }
-
-        return (int) (interval * MPEG2.TS_PACKET_BIT_SIZE * MPEG2.SYSTEM_CLOCK_FREQUENCY / (second - first));
-    }
-
-    public static int intervalMillis(ProgramClockReference first, ProgramClockReference second)
-    {
-        return intervalMillis(first.value(), second.value());
-    }
-
-    public static int intervalMillis(long first, long second)
+    public static int bitrate(long first, long second, long packets)
     {
         if (first == second)
             throw new IllegalArgumentException("invalid pcr value: first(" + first + "), second(" + second + ")");
@@ -89,15 +68,58 @@ public final class ProgramClockReference
             second = base * 300 + extension;
         }
 
-        return (int) ((second - first) * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY);
+        return (int) (packets * MPEG2.TS_PACKET_BIT_SIZE * MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ / (second - first));
     }
 
+    public static long deltaMillis(ProgramClockReference first,
+                                   ProgramClockReference second)
+    {
+        return deltaMillis(first.value(), second.value());
+    }
+
+    public static long deltaMillis(long first, long second)
+    {
+        if (first == second)
+            throw new IllegalArgumentException("invalid pcr value: first(" + first + "), second(" + second + ")");
+
+        if (first > second)
+        {
+            // PCR wrap round
+            long base = ((second / 300) & 0x1FFFFFFFFL) + 0x200000000L;
+            long extension = ((second % 300) & 0x1FFL);
+            second = base * 300 + extension;
+        }
+
+        return (second - first) * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ;
+    }
+
+    public static long deltaNanos(ProgramClockReference first,
+                                  ProgramClockReference second)
+    {
+        return deltaNanos(first.value(), second.value());
+    }
+
+    public static long deltaNanos(long first, long second)
+    {
+        if (first == second)
+            throw new IllegalArgumentException("invalid pcr value: first(" + first + "), second(" + second + ")");
+
+        if (first > second)
+        {
+            // PCR wrap round
+            long base = ((second / 300) & 0x1FFFFFFFFL) + 0x200000000L;
+            long extension = ((second % 300) & 0x1FFL);
+            second = base * 300 + extension;
+        }
+
+        return (second - first) * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY_MHZ;
+    }
 
     public static int[] toTimeline(long pcr)
     {
         int[] time = new int[5];
-        int sec = (int) (pcr / MPEG2.SYSTEM_CLOCK_FREQUENCY);
-        int msc = (int) (pcr * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY % 1000);
+        int sec = (int) (pcr / MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ);
+        int msc = (int) (pcr * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ % 1000);
         time[0] = sec / 86400; // dd
         time[1] = sec % 86400 / 3600;  // hh
         time[2] = sec % 3600 / 60;  // mm
@@ -108,8 +130,8 @@ public final class ProgramClockReference
 
     public static String toTimelineString(long pcr)
     {
-        int sec = (int) (pcr / MPEG2.SYSTEM_CLOCK_FREQUENCY);
-        int msc = (int) (pcr * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY % 1000);
+        int sec = (int) (pcr / MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ);
+        int msc = (int) (pcr * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ % 1000);
         int dd = sec / 86400;
         int hh = sec % 86400 / 3600;
         int mm = sec % 3600 / 60;
