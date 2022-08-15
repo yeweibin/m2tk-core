@@ -115,20 +115,12 @@ public final class ProgramClockReference
         return (second - first) * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY_MHZ;
     }
 
-    public static int[] toTimeline(long pcr)
+    public static double toTimepoint(long pcr)
     {
-        int[] time = new int[5];
-        int sec = (int) (pcr / MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ);
-        int msc = (int) (pcr * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ % 1000);
-        time[0] = sec / 86400; // dd
-        time[1] = sec % 86400 / 3600;  // hh
-        time[2] = sec % 3600 / 60;  // mm
-        time[3] = sec % 60; // ss
-        time[4] = msc;  // ms
-        return time;
+        return 1.0 * pcr / MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ;
     }
 
-    public static String toTimelineString(long pcr)
+    public static String toTimepointString(long pcr)
     {
         int sec = (int) (pcr / MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ);
         int msc = (int) (pcr * 1000 / MPEG2.SYSTEM_CLOCK_FREQUENCY_HZ % 1000);
@@ -144,13 +136,13 @@ public final class ProgramClockReference
         return pcrBase * 300 + pcrExtension;
     }
 
-    public int[] toTimeline()
+    public double toTimepoint()
     {
-        return toTimeline(value());
+        return toTimepoint(value());
     }
 
-    public String toTimelineString()
+    public String toTimepointString()
     {
-        return toTimelineString(value());
+        return toTimepointString(value());
     }
 }
