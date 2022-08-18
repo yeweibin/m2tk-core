@@ -224,6 +224,17 @@ public final class Encoding
         return Bytes.toHexString(buf, off + from, to - from);
     }
 
+    public String toHexStringPrettyPrint()
+    {
+        return Bytes.toHexStringPrettyPrint(buf, off, len);
+    }
+
+    public String toHexStringPrettyPrint(int from, int to)
+    {
+        Preconditions.checkFromIndexSize(from, to, len);
+        return Bytes.toHexStringPrettyPrint(buf, off + from, to - from);
+    }
+
     @Override
     public String toString()
     {
