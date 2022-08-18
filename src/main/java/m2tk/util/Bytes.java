@@ -203,7 +203,7 @@ public final class Bytes
 
     public static String toHexString(byte[] bytes, int offset, int length)
     {
-        if (bytes.length == 0)
+        if (length == 0)
             return "";
 
         char[] chars = new char[length * 2];
@@ -234,7 +234,7 @@ public final class Bytes
 
     public static String toHexStringPrettyPrint(byte[] bytes, int offset, int length)
     {
-        if (bytes.length == 0)
+        if (length == 0)
             return "";
 
         char[] chars = new char[length * 3];
