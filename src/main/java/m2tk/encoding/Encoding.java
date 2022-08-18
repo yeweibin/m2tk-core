@@ -231,7 +231,7 @@ public final class Encoding
 
     public String toHexStringPrettyPrint(int from, int to)
     {
-        Preconditions.checkFromIndexSize(from, to, len);
+        Preconditions.checkFromToIndex(from, to, len);
         return Bytes.toHexStringPrettyPrint(buf, off + from, to - from);
     }
 
