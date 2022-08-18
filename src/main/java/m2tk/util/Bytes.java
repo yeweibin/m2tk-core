@@ -209,4 +209,17 @@ public final class Bytes
         }
         return new String(chars);
     }
+
+    public static String toHexStringPrettyPrint(byte[] bytes, int offset, int length)
+    {
+        char[] chars = new char[length * 3];
+        for (int i = 0; i < length; i ++)
+        {
+            int v = bytes[offset + i] & 0xFF;
+            chars[i * 3    ] = HEX[v >>> 4];
+            chars[i * 3 + 1] = HEX[v & 0xF];
+            chars[i * 3 + 2] = ' ';
+        }
+        return new String(chars, 0, chars.length - 1);
+    }
 }
