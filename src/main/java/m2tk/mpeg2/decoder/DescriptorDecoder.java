@@ -47,6 +47,11 @@ public class DescriptorDecoder extends Decoder
         return encoding.readUINT8(0);
     }
 
+    public int getPayloadLength()
+    {
+        return encoding.readUINT8(1);
+    }
+
     public Encoding getPayload()
     {
         return encoding.readSelector(2);

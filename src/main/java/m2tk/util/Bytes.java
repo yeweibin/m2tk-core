@@ -188,6 +188,9 @@ public final class Bytes
 
     public static String toHexString(byte[] bytes)
     {
+        if (bytes.length == 0)
+            return "";
+
         char[] chars = new char[bytes.length * 2];
         for (int i = 0; i < bytes.length; i ++)
         {
@@ -200,6 +203,9 @@ public final class Bytes
 
     public static String toHexString(byte[] bytes, int offset, int length)
     {
+        if (bytes.length == 0)
+            return "";
+
         char[] chars = new char[length * 2];
         for (int i = 0; i < length; i ++)
         {
@@ -212,6 +218,9 @@ public final class Bytes
 
     public static String toHexStringPrettyPrint(byte[] bytes)
     {
+        if (bytes.length == 0)
+            return "";
+
         char[] chars = new char[bytes.length * 3];
         for (int i = 0; i < bytes.length; i ++)
         {
@@ -225,6 +234,9 @@ public final class Bytes
 
     public static String toHexStringPrettyPrint(byte[] bytes, int offset, int length)
     {
+        if (bytes.length == 0)
+            return "";
+
         char[] chars = new char[length * 3];
         for (int i = 0; i < length; i ++)
         {
