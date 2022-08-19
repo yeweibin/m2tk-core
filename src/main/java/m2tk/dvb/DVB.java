@@ -289,7 +289,47 @@ public final class DVB
             return construct_string_safely(bytes, offset + 1, length - 1, "UTF-8");
 
         if (first_byte == 0x10)
-            return construct_string_safely(bytes, offset + 3, length - 3, "UTF-8");
+        {
+            int second_byte = bytes[offset + 1] & 0xFF;
+            int third_byte = bytes[offset + 2] & 0xFF;
+
+            if (second_byte != 0x00 || third_byte >= 0x10)
+                return construct_string_safely(bytes, offset + 3, length - 3, "UTF-8");
+
+            switch (third_byte)
+            {
+                case 0x01:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-1");
+                case 0x02:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-2");
+                case 0x03:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-3");
+                case 0x04:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-4");
+                case 0x05:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-5");
+                case 0x06:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-6");
+                case 0x07:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-7");
+                case 0x08:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-8");
+                case 0x09:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-9");
+                case 0x0A:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-10");
+                case 0x0B:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-11");
+                case 0x0D:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-13");
+                case 0x0E:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-14");
+                case 0x0F:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "ISO-8859-15");
+                default:
+                    return construct_string_safely(bytes, offset + 3, length - 3, "UTF-8");
+            }
+        }
 
         if (first_byte == 0x11)
             return construct_string_safely(bytes, offset + 1, length - 1, "GBK");
