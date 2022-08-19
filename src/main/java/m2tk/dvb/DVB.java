@@ -27,7 +27,12 @@ public final class DVB
     {
     }
 
-    public static String decodeSatelliteFrequencyCode(long code)
+    public static String translateTerrestrialFrequencyCode(long code)
+    {
+        return String.format("%,d Hz", code * 10);
+    }
+
+    public static String translateSatelliteFrequencyCode(long code)
     {
         int d1 = (int) ((code >> 28) & 0xF);
         int d2 = (int) ((code >> 24) & 0xF);
@@ -39,10 +44,10 @@ public final class DVB
         int d8 = (int) ((code) & 0xF);
         int p1 = d1 * 100 + d2 * 10 + d3;
         int p2 = d4 * 10000 + d5 * 1000 + d6 * 100 + d7 * 10 + d8;
-        return String.format("%d.%05d", p1, p2);
+        return String.format("%03d.%05d GHz", p1, p2);
     }
 
-    public static String decodeCableFrequencyCode(long code)
+    public static String translateCableFrequencyCode(long code)
     {
         int d1 = (int) ((code >> 28) & 0xF);
         int d2 = (int) ((code >> 24) & 0xF);
@@ -54,7 +59,7 @@ public final class DVB
         int d8 = (int) ((code) & 0xF);
         int p1 = d1 * 1000 + d2 * 100 + d3 * 10 + d4;
         int p2 = d5 * 1000 + d6 * 100 + d7 * 10 + d8;
-        return String.format("%d.%04d", p1, p2);
+        return String.format("%04d.%04d MHz", p1, p2);
     }
 
     public static long encodeCableFrequencyCode(String frequency)
