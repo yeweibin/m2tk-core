@@ -28,19 +28,27 @@ public class ContentDescriptorDecoder extends DescriptorDecoder
                 target.readUINT8(0) == 0x54);
     }
 
-//    public ContentClassification[] getContentClassificationList()
-//    {
-//        int count = (encoding.size() - 2) / 2;
-//        ContentClassification[] list = new ContentClassification[count];
-//        for (int i = 0; i < count; i ++)
-//        {
-//            ContentClassification classification = new ContentClassification();
-//            int nibble = encoding.readUINT8(2 + i * 2);
-//            classification.level1 = nibble >> 4;
-//            classification.level2 = nibble & 0x0F;
-//            classification.userDefined = encoding.readUINT8(2 + i * 2 + 1);
-//            list[i] = classification;
-//        }
-//        return list;
-//    }
+    public int[] getContentIdentifierList()
+    {
+        int count = getPayloadLength() / 2;
+        int[] list = new int[count];
+        for (int i = 0; i < count; i++)
+            list[i] = encoding.readUINT16(2 + i * 2);
+        return list;
+    }
+
+    public int getContentNibbleLevel1(int identifier)
+    {
+        return (identifier >> 12) & 0xF;
+    }
+
+    public int getContentNibbleLevel2(int identifier)
+    {
+        return (identifier >> 8) & 0xF;
+    }
+
+    public int getUserByte(int identifier)
+    {
+        return identifier & 0xFF;
+    }
 }

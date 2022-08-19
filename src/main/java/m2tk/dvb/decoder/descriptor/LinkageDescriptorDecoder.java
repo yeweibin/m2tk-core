@@ -47,6 +47,56 @@ public class LinkageDescriptorDecoder extends DescriptorDecoder
         return encoding.readUINT8(8);
     }
 
+    public Encoding getMobileHandoverInfo()
+    {
+        if (getLinkageType() != 0x08)
+            return encoding.readSelector(9, 0);
+
+        int handoverType = (encoding.readUINT8(9) >> 4) & 0xF;
+        int originType = encoding.readUINT8(9) & 0b1;
+        int len = 1;
+        if (handoverType == 0x01 || handoverType == 0x02 || handoverType == 0x03)
+            len += 2; // 包含network_id
+        if (originType == 0x00)
+            len += 2; // 包含initial_service_id
+
+        return encoding.readSelector(9, len);
+    }
+
+    public int getNetworkID(Encoding handover)
+    {
+        int handoverType = (handover.readUINT8(0) >> 4) & 0xF;
+        return (handoverType == 0x01 || handoverType == 0x02 || handoverType == 0x03)
+               ? handover.readUINT16(1) // 包含network_id
+               : -1;
+    }
+
+    public int getInitialServiceID(Encoding handover)
+    {
+        int handoverType = (handover.readUINT8(0) >> 4) & 0xF;
+        int originType = handover.readUINT8(0) & 0b1;
+        int offset = 1;
+        if (handoverType == 0x01 || handoverType == 0x02 || handoverType == 0x03)
+            offset += 2; // 包含network_id
+        return (originType == 0x00)
+               ? handover.readUINT16(offset) // 包含initial_service_id
+               : -1;
+    }
+
+    public Encoding getEventLinkageInfo()
+    {
+        return (getLinkageType() == 0x0D)
+               ? encoding.readSelector(9, 3)
+               : encoding.readSelector(9, 0);
+    }
+
+    public Encoding getExtendedEventLinkageInfo()
+    {
+        return (getLinkageType() == 0x0E)
+               ? encoding.readSelector(9, 1 + encoding.readUINT8(9))
+               : encoding.readSelector(9, 0);
+    }
+
     public Encoding getSelector()
     {
         return encoding.readSelector(9);

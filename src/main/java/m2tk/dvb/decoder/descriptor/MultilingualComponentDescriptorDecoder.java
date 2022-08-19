@@ -16,10 +16,12 @@
 
 package m2tk.dvb.decoder.descriptor;
 
+import m2tk.dvb.DVB;
 import m2tk.encoding.Encoding;
 import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MultilingualComponentDescriptorDecoder extends DescriptorDecoder
 {
@@ -35,23 +37,26 @@ public class MultilingualComponentDescriptorDecoder extends DescriptorDecoder
         return encoding.readUINT8(2);
     }
 
-//    public MultilingualContent[] getDescriptionList()
-//    {
-//        ArrayList<MultilingualContent> list = new ArrayList<>();
-//        int from = 3;
-//        int to   = encoding.size();
-//        while (from < to)
-//        {
-//            int code = encoding.readUINT24(from);
-//            byte[] chars = encoding.getRange(from + 4, encoding.readUINT8(from + 3));
-//
-//            MultilingualContent description = new MultilingualContent();
-//            description.language = DVBUtils.decodeLanguageCode(code);
-//            description.text = DVBUtils.decodeString(chars);
-//
-//            list.add(description);
-//            from += 4 + chars.length;
-//        }
-//        return list.toArray(new MultilingualContent[list.size()]);
-//    }
+    public Encoding[] getMultilingualDescriptions()
+    {
+        List<Encoding> list = new ArrayList<>();
+        int offset = 3;
+        while (offset < encoding.size())
+        {
+            int start = offset;
+            offset += 4 + encoding.readUINT8(offset + 3);
+            list.add(encoding.readSelector(start, offset - start));
+        }
+        return list.toArray(new Encoding[0]);
+    }
+
+    public String getISO639LanguageCode(Encoding description)
+    {
+        return DVB.decodeThreeLetterCode(description.readUINT24(0));
+    }
+
+    public String getDescriptionText(Encoding description)
+    {
+        return DVB.decodeString(description.getRange(4, description.size()));
+    }
 }

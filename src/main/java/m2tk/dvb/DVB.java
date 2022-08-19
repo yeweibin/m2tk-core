@@ -16,8 +16,6 @@
 
 package m2tk.dvb;
 
-import m2tk.util.Bytes;
-
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +27,22 @@ public final class DVB
     {
     }
 
-    public static String decodeFrequencyCode(long code)
+    public static String decodeSatelliteFrequencyCode(long code)
+    {
+        int d1 = (int) ((code >> 28) & 0xF);
+        int d2 = (int) ((code >> 24) & 0xF);
+        int d3 = (int) ((code >> 20) & 0xF);
+        int d4 = (int) ((code >> 16) & 0xF);
+        int d5 = (int) ((code >> 12) & 0xF);
+        int d6 = (int) ((code >> 8) & 0xF);
+        int d7 = (int) ((code >> 4) & 0xF);
+        int d8 = (int) ((code) & 0xF);
+        int p1 = d1 * 100 + d2 * 10 + d3;
+        int p2 = d4 * 10000 + d5 * 1000 + d6 * 100 + d7 * 10 + d8;
+        return String.format("%d.%05d", p1, p2);
+    }
+
+    public static String decodeCableFrequencyCode(long code)
     {
         int d1 = (int) ((code >> 28) & 0xF);
         int d2 = (int) ((code >> 24) & 0xF);
@@ -44,23 +57,7 @@ public final class DVB
         return String.format("%d.%04d", p1, p2);
     }
 
-    public static long encodeFrequencyCode(int freqKHz)
-    {
-        long p1 = freqKHz / 1000;
-        long p2 = freqKHz % 1000;
-        long d1 = p1 / 1000;
-        long d2 = p1 % 1000 / 100;
-        long d3 = p1 % 100 / 10;
-        long d4 = p1 % 10;
-        long d5 = p2 / 1000;
-        long d6 = p2 % 1000 / 100;
-        long d7 = p2 % 100 / 10;
-        long d8 = p2 % 10;
-        return ((d1 << 28) | (d2 << 24) | (d3 << 20) | (d4 << 16) |
-                (d5 << 12) | (d6 << 8) | (d7 << 4) | (d8));
-    }
-
-    public static long encodeFrequencyCode(String frequency)
+    public static long encodeCableFrequencyCode(String frequency)
     {
         int offset = frequency.indexOf('.');
         long p1 = Integer.parseInt(frequency.substring(0, offset));
@@ -89,21 +86,6 @@ public final class DVB
         int p1 = d1 * 100 + d2 * 10 + d3;
         int p2 = d4 * 1000 + d5 * 100 + d6 * 10 + d7;
         return String.format("%d.%04d", p1, p2);
-    }
-
-    public static int encodeSymbolRateCode(int rateKsymbol)
-    {
-        int p1 = rateKsymbol / 1000;
-        int p2 = rateKsymbol % 1000;
-        int d1 = p1 / 100;
-        int d2 = p1 % 100 / 10;
-        int d3 = p1 % 10;
-        int d4 = p2 / 1000;
-        int d5 = p2 % 1000 / 100;
-        int d6 = p2 % 100 / 10;
-        int d7 = p2 % 10;
-        return (d1 << 24) | (d2 << 20) | (d3 << 16) |
-               (d4 << 12) | (d5 << 8) | (d6 << 4) | d7;
     }
 
     public static int encodeSymbolRateCode(String rate)
@@ -274,28 +256,7 @@ public final class DVB
         int d = date.getDayOfMonth();
         int k = (m == 1 || m == 2) ? 1 : 0;
 
-        int mjd = 14956 + d + (int) ((y - k) * 365.25) + (int) ((m + 1 + k * 12) * 30.6001);
-        return mjd;
-    }
-
-    @Deprecated
-    public static String decodeLanguageCode(int code)
-    {
-        byte[] bytes = new byte[3];
-        bytes[0] = (byte) ((code >> 16) & 0xFF);
-        bytes[1] = (byte) ((code >> 8) & 0xFF);
-        bytes[2] = (byte) ((code) & 0xFF);
-        return new String(bytes);
-    }
-
-    @Deprecated
-    public static String decodeCountryCode(int code)
-    {
-        byte[] bytes = new byte[3];
-        bytes[0] = (byte) ((code >> 16) & 0xFF);
-        bytes[1] = (byte) ((code >> 8) & 0xFF);
-        bytes[2] = (byte) ((code) & 0xFF);
-        return new String(bytes);
+        return 14956 + d + (int) ((y - k) * 365.25) + (int) ((m + 1 + k * 12) * 30.6001);
     }
 
     public static String decodeThreeLetterCode(int code)
@@ -323,6 +284,12 @@ public final class DVB
             return "";
 
         int first_byte = bytes[offset] & 0xFF;
+
+        if (0x01 <= first_byte && first_byte <= 0x0B)
+            return construct_string_safely(bytes, offset + 1, length - 1, "UTF-8");
+
+        if (first_byte == 0x10)
+            return construct_string_safely(bytes, offset + 3, length - 3, "UTF-8");
 
         if (first_byte == 0x11)
             return construct_string_safely(bytes, offset + 1, length - 1, "GBK");

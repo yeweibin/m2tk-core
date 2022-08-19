@@ -15,8 +15,12 @@
  */
 package m2tk.dvb.decoder.descriptor;
 
+import m2tk.dvb.DVB;
 import m2tk.encoding.Encoding;
 import m2tk.mpeg2.decoder.DescriptorDecoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultilingualNetworkNameDescriptorDecoder extends DescriptorDecoder
 {
@@ -27,23 +31,26 @@ public class MultilingualNetworkNameDescriptorDecoder extends DescriptorDecoder
                 target.readUINT8(0) == 0x5B);
     }
 
-//    public MultilingualContent[] getNetworkNameList()
-//    {
-//        ArrayList<MultilingualContent> list = new ArrayList<>();
-//        int from = 2;
-//        int to   = encoding.size();
-//        while (from < to)
-//        {
-//            int code = encoding.readUINT24(from);
-//            byte[] chars = encoding.getRange(from + 4, encoding.readUINT8(from + 3));
-//
-//            MultilingualContent name = new MultilingualContent();
-//            name.language = DVBUtils.decodeLanguageCode(code);
-//            name.text = DVBUtils.decodeString(chars);
-//
-//            list.add(name);
-//            from += 4 + chars.length;
-//        }
-//        return list.toArray(new MultilingualContent[list.size()]);
-//    }
+    public Encoding[] getMultilingualNames()
+    {
+        List<Encoding> list = new ArrayList<>();
+        int offset = 2;
+        while (offset < encoding.size())
+        {
+            int start = offset;
+            offset += 4 + encoding.readUINT8(offset + 3);
+            list.add(encoding.readSelector(start, offset - start));
+        }
+        return list.toArray(new Encoding[0]);
+    }
+
+    public String getISO639LanguageCode(Encoding name)
+    {
+        return DVB.decodeThreeLetterCode(name.readUINT24(0));
+    }
+
+    public String getMultilingualName(Encoding name)
+    {
+        return DVB.decodeString(name.getRange(4, name.size()));
+    }
 }

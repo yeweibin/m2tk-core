@@ -15,8 +15,12 @@
  */
 package m2tk.dvb.decoder.descriptor;
 
+import m2tk.dvb.DVB;
 import m2tk.encoding.Encoding;
 import m2tk.mpeg2.decoder.DescriptorDecoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultilingualBouquetNameDescriptorDecoder extends DescriptorDecoder
 {
@@ -31,20 +35,26 @@ public class MultilingualBouquetNameDescriptorDecoder extends DescriptorDecoder
         return (super.isAttachable(target) && target.readUINT8(0) == 0x5C);
     }
 
-    public Encoding getMultilingualBouquetName(int index)
+    public Encoding[] getMultilingualNames()
     {
-        int idx = 0;
-        int from = 2;
-        int to   = encoding.size();
-        while (from < to)
+        List<Encoding> list = new ArrayList<>();
+        int offset = 2;
+        while (offset < encoding.size())
         {
-            int block_size = 3 + 1 + encoding.readUINT8(from + 3);
-            if (idx == index)
-                return encoding.readSelector(from, block_size);
-
-            from += block_size;
-            idx ++;
+            int start = offset;
+            offset += 4 + encoding.readUINT8(offset + 3);
+            list.add(encoding.readSelector(start, offset - start));
         }
-        throw new IndexOutOfBoundsException("invalid index: " + index);
+        return list.toArray(new Encoding[0]);
+    }
+
+    public String getISO639LanguageCode(Encoding name)
+    {
+        return DVB.decodeThreeLetterCode(name.readUINT24(0));
+    }
+
+    public String getMultilingualName(Encoding name)
+    {
+        return DVB.decodeString(name.getRange(4, name.size()));
     }
 }
