@@ -15,11 +15,17 @@
  */
 package m2tk.dvb.decoder.descriptor;
 
+import m2tk.dvb.DVB;
 import m2tk.encoding.Encoding;
 import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class ParentalRatingDescriptorDecoder extends DescriptorDecoder
 {
+    public ParentalRatingDescriptorDecoder()
+    {
+        super("ParentalRatingDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {
@@ -27,17 +33,18 @@ public class ParentalRatingDescriptorDecoder extends DescriptorDecoder
                 target.readUINT8(0) == 0x55);
     }
 
-//    public ParentalRating[] getParentalRatingList()
-//    {
-//        int count = (encoding.size() - 2) / 4;
-//        ParentalRating[] list = new ParentalRating[count];
-//        for (int i = 0; i < count; i ++)
-//        {
-//            ParentalRating rating = new ParentalRating();
-//            rating.country = DVBUtils.decodeCountryCode(encoding.readUINT24(2 + i * 4));
-//            rating.value = encoding.readUINT8(2 + i * 4 + 3);
-//            list[i] = rating;
-//        }
-//        return list;
-//    }
+    public int getRatingCount()
+    {
+        return getPayloadLength() / 4;
+    }
+
+    public String getCountryCode(int index)
+    {
+        return DVB.decodeThreeLetterCode(encoding.readUINT24(2 + index * 4));
+    }
+
+    public int getRating(int index)
+    {
+        return encoding.readUINT8(2 + index * 4 + 3);
+    }
 }

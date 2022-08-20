@@ -26,13 +26,13 @@ public class ExtendedEventDescriptorDecoder extends DescriptorDecoder
 {
     public ExtendedEventDescriptorDecoder()
     {
-        super(ExtendedEventDescriptorDecoder.class.getSimpleName());
+        super("ExtendedEventDescriptorDecoder");
     }
 
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) && target.readUINT8(0) == 0x4E);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x4E;
     }
 
     public int getDescriptorNumber()

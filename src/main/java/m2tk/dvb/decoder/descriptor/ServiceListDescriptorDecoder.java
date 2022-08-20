@@ -25,6 +25,11 @@ import java.util.Objects;
 
 public class ServiceListDescriptorDecoder extends DescriptorDecoder
 {
+    public ServiceListDescriptorDecoder()
+    {
+        super("ServiceListDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {

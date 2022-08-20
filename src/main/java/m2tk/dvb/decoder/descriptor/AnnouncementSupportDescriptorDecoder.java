@@ -32,7 +32,7 @@ public class AnnouncementSupportDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) && target.readUINT8(0) == 0x6E);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x6E;
     }
 
     public int getAnnouncementSupportIndicator()

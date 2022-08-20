@@ -30,7 +30,7 @@ public class BouquetNameDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) && target.readUINT8(0) == 0x47);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x47;
     }
 
     public String getBouquetName()

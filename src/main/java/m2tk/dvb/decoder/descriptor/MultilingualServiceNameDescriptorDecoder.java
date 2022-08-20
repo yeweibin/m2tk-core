@@ -24,7 +24,10 @@ import java.util.List;
 
 public class MultilingualServiceNameDescriptorDecoder extends DescriptorDecoder
 {
-    public static final int TAG = 0x5D;
+    public MultilingualServiceNameDescriptorDecoder()
+    {
+        super("MultilingualServiceNameDescriptorDecoder");
+    }
 
     @Override
     public boolean isAttachable(Encoding target)

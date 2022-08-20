@@ -21,6 +21,11 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class StuffingDescriptorDecoder extends DescriptorDecoder
 {
+    public StuffingDescriptorDecoder()
+    {
+        super("StuffingDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {

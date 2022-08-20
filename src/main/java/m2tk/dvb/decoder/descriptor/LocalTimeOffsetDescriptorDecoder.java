@@ -25,13 +25,13 @@ public class LocalTimeOffsetDescriptorDecoder extends DescriptorDecoder
 
     public LocalTimeOffsetDescriptorDecoder()
     {
-        super(LocalTimeOffsetDescriptorDecoder.class.getSimpleName());
+        super("LocalTimeOffsetDescriptorDecoder");
     }
 
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) && target.readUINT8(0) == 0x58);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x58;
     }
 
     public int getDescriptionCount()

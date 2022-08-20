@@ -23,7 +23,7 @@ public class ShortEventDescriptorDecoder extends DescriptorDecoder
 {
     public ShortEventDescriptorDecoder()
     {
-        super(ShortEventDescriptorDecoder.class.getSimpleName());
+        super("ShortEventDescriptorDecoder");
     }
 
     @Override

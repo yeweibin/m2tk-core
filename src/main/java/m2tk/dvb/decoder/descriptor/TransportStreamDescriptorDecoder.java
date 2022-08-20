@@ -21,6 +21,11 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class TransportStreamDescriptorDecoder extends DescriptorDecoder
 {
+    public TransportStreamDescriptorDecoder()
+    {
+        super("TransportStreamDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {

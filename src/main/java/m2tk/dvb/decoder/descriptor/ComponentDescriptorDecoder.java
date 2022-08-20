@@ -30,7 +30,7 @@ public class ComponentDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) && target.readUINT8(0) == 0x50);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x50;
     }
 
     public int getStreamContentType()

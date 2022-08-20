@@ -20,6 +20,11 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class ScramblingDescriptorDecoder extends DescriptorDecoder
 {
+    public ScramblingDescriptorDecoder()
+    {
+        super("ScramblingDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {

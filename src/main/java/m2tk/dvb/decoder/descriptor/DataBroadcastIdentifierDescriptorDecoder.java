@@ -20,11 +20,15 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class DataBroadcastIdentifierDescriptorDecoder extends DescriptorDecoder
 {
+    public DataBroadcastIdentifierDescriptorDecoder()
+    {
+        super("DataBroadcastIdentifierDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x66);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x66;
     }
 
     public int getDataBroadcastID()

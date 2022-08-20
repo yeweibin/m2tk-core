@@ -79,7 +79,7 @@ public final class DVB
                 (d5 << 12) | (d6 << 8) | (d7 << 4) | (d8));
     }
 
-    public static String decodeSymbolRateCode(int code)
+    public static String translateSymbolRateCode(int code)
     {
         int d1 = (code >> 24) & 0xF;
         int d2 = (code >> 20) & 0xF;
@@ -90,7 +90,7 @@ public final class DVB
         int d7 = (code) & 0xF;
         int p1 = d1 * 100 + d2 * 10 + d3;
         int p2 = d4 * 1000 + d5 * 100 + d6 * 10 + d7;
-        return String.format("%d.%04d", p1, p2);
+        return String.format("%03d.%04d MSymbol/s", p1, p2);
     }
 
     public static int encodeSymbolRateCode(String rate)
@@ -220,25 +220,23 @@ public final class DVB
 
     private static LocalDate computeCalendarDateFrom24BitMJD(int mjd)
     {
-        /**
-         * 从MJD值中还原出年、月、日。
-         *
-         *    Y' = int [ (MJD - 15078.2) / 365.25 ]
-         *    M' = int { [ MJD - 14 956.1 - int (Y' × 365.25) ] / 30.6001 }
-         *    D = MJD - 14 956 - int (Y' × 365.25) - int (M' × 30.6001)
-         *    If M' = 14 or M' = 15, then K = 1; else K = 0
-         *    Y = Y' + K
-         *    M = M' - 1 - K × 12
-         *
-         *  注意：年份从1900开始计算，因此，对于2010年，Y等于110。
+        /*
+          从MJD值中还原出年、月、日。
+
+             Y' = int [ (MJD - 15078.2) / 365.25 ]
+             M' = int { [ MJD - 14 956.1 - int (Y' × 365.25) ] / 30.6001 }
+             D = MJD - 14 956 - int (Y' × 365.25) - int (M' × 30.6001)
+             If M' = 14 or M' = 15, then K = 1; else K = 0
+             Y = Y' + K
+             M = M' - 1 - K × 12
+
+           注意：年份从1900开始计算，因此，对于2010年，Y等于110。
          */
 
-        int y, m, d, k;
-
-        y = (int) ((mjd - 15078.2) / 365.25);
-        m = (int) ((mjd - 14956.1 - (int) (y * 365.25)) / 30.6001);
-        d = mjd - 14956 - (int) (y * 365.25) - (int) (m * 30.6001);
-        k = (m == 14 || m == 15) ? 1 : 0;
+        int y = (int) ((mjd - 15078.2) / 365.25);
+        int m = (int) ((mjd - 14956.1 - (int) (y * 365.25)) / 30.6001);
+        int d = mjd - 14956 - (int) (y * 365.25) - (int) (m * 30.6001);
+        int k = (m == 14 || m == 15) ? 1 : 0;
 
         int year = 1900 + y + k;
         int month = m - 1 - k * 12;
@@ -290,8 +288,35 @@ public final class DVB
 
         int first_byte = bytes[offset] & 0xFF;
 
-        if (0x01 <= first_byte && first_byte <= 0x0B)
-            return construct_string_safely(bytes, offset + 1, length - 1, "UTF-8");
+        if (first_byte == 0x01)
+            return construct_string_safely(bytes, offset + 1, length - 1, "ISO-8859-5");
+
+        if (first_byte == 0x02)
+            return construct_string_safely(bytes, offset + 1, length - 1, "ISO-8859-6");
+
+        if (first_byte == 0x03)
+            return construct_string_safely(bytes, offset + 1, length - 1, "ISO-8859-7");
+
+        if (first_byte == 0x04)
+            return construct_string_safely(bytes, offset + 1, length - 1, "ISO-8859-8");
+
+        if (first_byte == 0x05)
+            return construct_string_safely(bytes, offset + 1, length - 1, "ISO-8859-9");
+
+        if (first_byte == 0x06)
+            return construct_string_safely(bytes, offset + 1, length - 1, "ISO-8859-10");
+
+        if (first_byte == 0x07)
+            return construct_string_safely(bytes, offset + 1, length - 1, "ISO-8859-11");
+
+        if (first_byte == 0x09)
+            return construct_string_safely(bytes, offset + 1, length - 1, "ISO-8859-13");
+
+        if (first_byte == 0x0A)
+            return construct_string_safely(bytes, offset + 1, length - 1, "ISO-8859-14");
+
+        if (first_byte == 0x0B)
+            return construct_string_safely(bytes, offset + 1, length - 1, "ISO-8859-15");
 
         if (first_byte == 0x10)
         {

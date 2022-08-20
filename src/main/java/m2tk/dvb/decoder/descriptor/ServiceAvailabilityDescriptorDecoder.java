@@ -20,7 +20,10 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class ServiceAvailabilityDescriptorDecoder extends DescriptorDecoder
 {
-    public static final int TAG = 0x72;
+    public ServiceAvailabilityDescriptorDecoder()
+    {
+        super("ServiceAvailabilityDescriptorDecoder");
+    }
 
     @Override
     public boolean isAttachable(Encoding target)

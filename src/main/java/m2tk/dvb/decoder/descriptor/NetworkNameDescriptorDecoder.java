@@ -21,7 +21,10 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class NetworkNameDescriptorDecoder extends DescriptorDecoder
 {
-    public static final int TAG = 0x40;
+    public NetworkNameDescriptorDecoder()
+    {
+        super("NetworkNameDescriptorDecoder");
+    }
 
     @Override
     public boolean isAttachable(Encoding target)

@@ -21,6 +21,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class AdaptationFieldDataDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x70;
+
     public AdaptationFieldDataDescriptorDecoder()
     {
         super("AdaptationFieldDataDescriptorDecoder");
@@ -29,9 +31,9 @@ public class AdaptationFieldDataDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x70 &&
-                target.size() == 3);
+        return super.isAttachable(target) &&
+               target.readUINT8(0) == TAG &&
+               target.size() == 3;
     }
 
     public int getAdaptationFieldDataIdentifier()

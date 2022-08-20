@@ -29,7 +29,7 @@ public class CAIdentifierDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) && target.readUINT8(0) == 0x53);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x53;
     }
 
     public int getIdentifierCount()
@@ -40,5 +40,15 @@ public class CAIdentifierDescriptorDecoder extends DescriptorDecoder
     public int getCASystemID(int index)
     {
         return encoding.readUINT16(2 + index * 2);
+    }
+
+    public int[] getCASystemIDs()
+    {
+        int[] systemIDs = new int[getIdentifierCount()];
+        for (int i = 0; i < systemIDs.length; i++)
+        {
+            systemIDs[i] = getCASystemID(i);
+        }
+        return systemIDs;
     }
 }

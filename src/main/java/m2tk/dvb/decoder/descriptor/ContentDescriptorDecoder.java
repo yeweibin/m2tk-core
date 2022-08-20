@@ -21,11 +21,15 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class ContentDescriptorDecoder extends DescriptorDecoder
 {
+    public ContentDescriptorDecoder()
+    {
+        super("ContentDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x54);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x54;
     }
 
     public int[] getContentIdentifierList()

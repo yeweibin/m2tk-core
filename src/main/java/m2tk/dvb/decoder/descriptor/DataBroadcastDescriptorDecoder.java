@@ -20,13 +20,15 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class DataBroadcastDescriptorDecoder extends DescriptorDecoder
 {
-    public static final int TAG = 0x64;
+    public DataBroadcastDescriptorDecoder()
+    {
+        super("DataBroadcastDescriptorDecoder");
+    }
 
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x64);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x64;
     }
 
     public int getDataBroadcastID()
@@ -45,16 +47,4 @@ public class DataBroadcastDescriptorDecoder extends DescriptorDecoder
         int length = encoding.readUINT8(5);
         return encoding.readSelector(start, length);
     }
-
-//    public MultilingualContent getDescription()
-//    {
-//        int code = encoding.readUINT24(6 + encoding.readUINT8(5));
-//        byte[] chars = encoding.getRange(10 + encoding.readUINT8(5), encoding.size());
-//
-//        MultilingualContent description = new MultilingualContent();
-//        description.language = DVBUtils.decodeLanguageCode(code);
-//        description.text = DVBUtils.decodeString(chars);
-//
-//        return description;
-//    }
 }

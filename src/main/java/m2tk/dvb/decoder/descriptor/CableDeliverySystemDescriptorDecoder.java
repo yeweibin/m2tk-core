@@ -29,7 +29,9 @@ public class CableDeliverySystemDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) && target.readUINT8(0) == 0x44);
+        return super.isAttachable(target) &&
+               target.readUINT8(0) == 0x44 &&
+               target.size() == 13;
     }
 
     public long getFrequencyCode()

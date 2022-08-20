@@ -20,6 +20,11 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class StreamIdentifierDescriptorDecoder extends DescriptorDecoder
 {
+    public StreamIdentifierDescriptorDecoder()
+    {
+        super("StreamIdentifierDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {

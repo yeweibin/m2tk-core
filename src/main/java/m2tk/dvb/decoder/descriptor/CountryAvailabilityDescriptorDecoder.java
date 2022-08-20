@@ -21,6 +21,11 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class CountryAvailabilityDescriptorDecoder extends DescriptorDecoder
 {
+    public CountryAvailabilityDescriptorDecoder()
+    {
+        super("CountryAvailabilityDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {

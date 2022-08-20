@@ -25,6 +25,11 @@ import java.util.List;
 
 public class MultilingualComponentDescriptorDecoder extends DescriptorDecoder
 {
+    public MultilingualComponentDescriptorDecoder()
+    {
+        super("MultilingualComponentDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {

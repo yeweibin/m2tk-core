@@ -20,10 +20,15 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class FrequencyListDescriptorDecoder extends DescriptorDecoder
 {
+    public FrequencyListDescriptorDecoder()
+    {
+        super("FrequencyListDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) && target.readUINT8(0) == 0x62);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x62;
     }
 
     public int getCodingType()

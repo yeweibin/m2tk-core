@@ -24,6 +24,11 @@ import java.util.List;
 
 public class MultilingualNetworkNameDescriptorDecoder extends DescriptorDecoder
 {
+    public MultilingualNetworkNameDescriptorDecoder()
+    {
+        super("MultilingualNetworkNameDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {

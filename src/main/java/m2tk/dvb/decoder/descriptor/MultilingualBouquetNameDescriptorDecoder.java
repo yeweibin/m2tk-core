@@ -26,7 +26,7 @@ public class MultilingualBouquetNameDescriptorDecoder extends DescriptorDecoder
 {
     public MultilingualBouquetNameDescriptorDecoder()
     {
-        super(MultilingualBouquetNameDescriptorDecoder.class.getSimpleName());
+        super("MultilingualBouquetNameDescriptorDecoder");
     }
 
     @Override

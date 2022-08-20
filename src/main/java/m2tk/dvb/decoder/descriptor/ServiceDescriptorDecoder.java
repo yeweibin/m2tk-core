@@ -21,11 +21,15 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class ServiceDescriptorDecoder extends DescriptorDecoder
 {
+    public ServiceDescriptorDecoder()
+    {
+        super("ServiceDescriptorDecoder");
+    }
+
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x48);
+        return super.isAttachable(target) && target.readUINT8(0) == 0x48;
     }
 
     public int getServiceType()

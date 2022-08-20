@@ -29,7 +29,9 @@ public class SatelliteDeliverySystemDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) && target.readUINT8(0) == 0x43);
+        return super.isAttachable(target) &&
+               target.readUINT8(0) == 0x43 &&
+               target.size() == 13;
     }
 
     public long getFrequencyCode()
