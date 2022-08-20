@@ -15,11 +15,14 @@
  */
 package m2tk.dvb.decoder.descriptor;
 
+import m2tk.dvb.DVB;
 import m2tk.encoding.Encoding;
 import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class DataBroadcastDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x64;
+
     public DataBroadcastDescriptorDecoder()
     {
         super("DataBroadcastDescriptorDecoder");
@@ -28,7 +31,7 @@ public class DataBroadcastDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return super.isAttachable(target) && target.readUINT8(0) == 0x64;
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public int getDataBroadcastID()
@@ -41,10 +44,34 @@ public class DataBroadcastDescriptorDecoder extends DescriptorDecoder
         return encoding.readUINT8(4);
     }
 
+    public int getSelectorLength()
+    {
+        return encoding.readUINT8(5);
+    }
+
     public Encoding getSelector()
     {
         int start = 6;
         int length = encoding.readUINT8(5);
         return encoding.readSelector(start, length);
+    }
+
+    public String getLanguageCode()
+    {
+        int offset = 6 + encoding.readUINT8(5);
+        return DVB.decodeThreeLetterCode(encoding.readUINT24(offset));
+    }
+
+    public int getTextLength()
+    {
+        int offset = 6 + encoding.readUINT8(5) + 3;
+        return encoding.readUINT8(offset);
+    }
+
+    public String getText()
+    {
+        int offset = 6 + encoding.readUINT8(5) + 3;
+        int len = encoding.readUINT8(offset);
+        return DVB.decodeString(encoding.getRange(offset + 1, offset + 1 + len));
     }
 }

@@ -24,6 +24,8 @@ import java.util.List;
 
 public class MultilingualServiceNameDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x5D;
+
     public MultilingualServiceNameDescriptorDecoder()
     {
         super("MultilingualServiceNameDescriptorDecoder");
@@ -32,8 +34,7 @@ public class MultilingualServiceNameDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x5D);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public Encoding[] getMultilingualNames()
@@ -50,7 +51,7 @@ public class MultilingualServiceNameDescriptorDecoder extends DescriptorDecoder
         return list.toArray(new Encoding[0]);
     }
 
-    public String getISO639LanguageCode(Encoding name)
+    public String getLanguageCode(Encoding name)
     {
         return DVB.decodeThreeLetterCode(name.readUINT24(0));
     }

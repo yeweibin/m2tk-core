@@ -25,6 +25,8 @@ import java.util.List;
 
 public class MultilingualComponentDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x5E;
+
     public MultilingualComponentDescriptorDecoder()
     {
         super("MultilingualComponentDescriptorDecoder");
@@ -33,8 +35,7 @@ public class MultilingualComponentDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x5E);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public int getComponentTag()
@@ -55,7 +56,7 @@ public class MultilingualComponentDescriptorDecoder extends DescriptorDecoder
         return list.toArray(new Encoding[0]);
     }
 
-    public String getISO639LanguageCode(Encoding description)
+    public String getLanguageCode(Encoding description)
     {
         return DVB.decodeThreeLetterCode(description.readUINT24(0));
     }

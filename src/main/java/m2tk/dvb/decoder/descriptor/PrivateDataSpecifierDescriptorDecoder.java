@@ -19,38 +19,25 @@ package m2tk.dvb.decoder.descriptor;
 import m2tk.encoding.Encoding;
 import m2tk.mpeg2.decoder.DescriptorDecoder;
 
-public class CAIdentifierDescriptorDecoder extends DescriptorDecoder
+public class PrivateDataSpecifierDescriptorDecoder extends DescriptorDecoder
 {
-    public static final int TAG = 0x53;
+    public static final int TAG = 0x5F;
 
-    public CAIdentifierDescriptorDecoder()
+    public PrivateDataSpecifierDescriptorDecoder()
     {
-        super("CAIdentifierDescriptorDecoder");
+        super("PrivateDataSpecifierDescriptorDecoder");
     }
 
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return super.isAttachable(target) && target.readUINT8(0) == TAG;
+        return super.isAttachable(target) &&
+               target.readUINT8(0) == TAG &&
+               target.size() == 6;
     }
 
-    public int getIdentifierCount()
+    public long getPrivateDataSpecifier()
     {
-        return encoding.readUINT8(1) / 2;
-    }
-
-    public int getCASystemID(int index)
-    {
-        return encoding.readUINT16(2 + index * 2);
-    }
-
-    public int[] getCASystemIDs()
-    {
-        int[] systemIDs = new int[getIdentifierCount()];
-        for (int i = 0; i < systemIDs.length; i++)
-        {
-            systemIDs[i] = getCASystemID(i);
-        }
-        return systemIDs;
+        return encoding.readUINT32(2);
     }
 }

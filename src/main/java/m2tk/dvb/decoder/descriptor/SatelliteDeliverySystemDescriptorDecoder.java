@@ -21,6 +21,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class SatelliteDeliverySystemDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x43;
+
     public SatelliteDeliverySystemDescriptorDecoder()
     {
         super("SatelliteDeliverySystemDescriptorDecoder");
@@ -30,7 +32,7 @@ public class SatelliteDeliverySystemDescriptorDecoder extends DescriptorDecoder
     public boolean isAttachable(Encoding target)
     {
         return super.isAttachable(target) &&
-               target.readUINT8(0) == 0x43 &&
+               target.readUINT8(0) == TAG &&
                target.size() == 13;
     }
 

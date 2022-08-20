@@ -24,6 +24,8 @@ import java.util.List;
 
 public class ExtendedEventDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x4E;
+
     public ExtendedEventDescriptorDecoder()
     {
         super("ExtendedEventDescriptorDecoder");
@@ -32,7 +34,7 @@ public class ExtendedEventDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return super.isAttachable(target) && target.readUINT8(0) == 0x4E;
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public int getDescriptorNumber()

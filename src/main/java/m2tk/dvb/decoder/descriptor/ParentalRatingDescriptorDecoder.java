@@ -21,6 +21,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class ParentalRatingDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x55;
+
     public ParentalRatingDescriptorDecoder()
     {
         super("ParentalRatingDescriptorDecoder");
@@ -29,8 +31,7 @@ public class ParentalRatingDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x55);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public int getRatingCount()

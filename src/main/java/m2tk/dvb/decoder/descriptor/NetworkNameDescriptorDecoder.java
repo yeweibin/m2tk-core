@@ -21,6 +21,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class NetworkNameDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x40;
+
     public NetworkNameDescriptorDecoder()
     {
         super("NetworkNameDescriptorDecoder");
@@ -29,8 +31,7 @@ public class NetworkNameDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x40);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public String getNetworkName()

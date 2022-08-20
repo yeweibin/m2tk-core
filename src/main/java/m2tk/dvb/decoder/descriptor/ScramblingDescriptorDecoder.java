@@ -20,6 +20,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class ScramblingDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x65;
+
     public ScramblingDescriptorDecoder()
     {
         super("ScramblingDescriptorDecoder");
@@ -28,8 +30,7 @@ public class ScramblingDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x65);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public int getScramblingMode()

@@ -24,6 +24,8 @@ import java.util.Arrays;
 
 public class AnnouncementSupportDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x6E;
+
     public AnnouncementSupportDescriptorDecoder()
     {
         super("AnnouncementSupportDescriptorDecoder");
@@ -32,7 +34,7 @@ public class AnnouncementSupportDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return super.isAttachable(target) && target.readUINT8(0) == 0x6E;
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public int getAnnouncementSupportIndicator()

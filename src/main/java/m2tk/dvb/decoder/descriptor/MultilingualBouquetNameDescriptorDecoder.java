@@ -24,6 +24,8 @@ import java.util.List;
 
 public class MultilingualBouquetNameDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x5C;
+
     public MultilingualBouquetNameDescriptorDecoder()
     {
         super("MultilingualBouquetNameDescriptorDecoder");
@@ -32,7 +34,7 @@ public class MultilingualBouquetNameDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) && target.readUINT8(0) == 0x5C);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public Encoding[] getMultilingualNames()
@@ -48,7 +50,7 @@ public class MultilingualBouquetNameDescriptorDecoder extends DescriptorDecoder
         return list.toArray(new Encoding[0]);
     }
 
-    public String getISO639LanguageCode(Encoding name)
+    public String getLanguageCode(Encoding name)
     {
         return DVB.decodeThreeLetterCode(name.readUINT24(0));
     }

@@ -21,6 +21,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class TransportStreamDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x67;
+
     public TransportStreamDescriptorDecoder()
     {
         super("TransportStreamDescriptorDecoder");
@@ -29,7 +31,6 @@ public class TransportStreamDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x67);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 }

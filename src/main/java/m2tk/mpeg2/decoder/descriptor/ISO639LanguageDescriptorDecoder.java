@@ -13,45 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package m2tk.dvb.decoder.descriptor;
+
+package m2tk.mpeg2.decoder.descriptor;
 
 import m2tk.dvb.DVB;
 import m2tk.encoding.Encoding;
 import m2tk.mpeg2.decoder.DescriptorDecoder;
 
-public class ServiceDescriptorDecoder extends DescriptorDecoder
+public class ISO639LanguageDescriptorDecoder extends DescriptorDecoder
 {
-    public static final int TAG = 0x48;
+    public static final int TAG = 0x0A;
+    private static final int BLOCK_SIZE = 4;
 
-    public ServiceDescriptorDecoder()
+    public ISO639LanguageDescriptorDecoder()
     {
-        super("ServiceDescriptorDecoder");
+        super("ISO639LanguageDescriptorDecoder");
     }
 
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return super.isAttachable(target) && target.readUINT8(0) == TAG;
+        return super.isAttachable(target) &&
+               target.readUINT8(0) == TAG &&
+               target.readUINT8(1) % BLOCK_SIZE == 0;
     }
 
-    public int getServiceType()
+    public int getDescriptionCount()
     {
-        return encoding.readUINT8(2);
+        return getPayloadLength() / BLOCK_SIZE;
     }
 
-    public String getServiceProviderName()
+    public String getLanguageCode(int index)
     {
-        int from = 4;
-        int to = 4 + encoding.readUINT8(3);
-        byte[] chars = encoding.getRange(from, to);
-        return DVB.decodeString(chars);
+        int offset = 2 + BLOCK_SIZE * index;
+        return DVB.decodeThreeLetterCode(encoding.readUINT24(offset));
     }
 
-    public String getServiceName()
+    public int getAudioType(int index)
     {
-        int from = 5 + encoding.readUINT8(3);
-        int to = encoding.size();
-        byte[] chars = encoding.getRange(from, to);
-        return DVB.decodeString(chars);
+        int offset = 2 + BLOCK_SIZE * index;
+        return encoding.readUINT8(offset + 3);
     }
 }

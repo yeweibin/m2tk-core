@@ -20,6 +20,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class StreamIdentifierDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x52;
+
     public StreamIdentifierDescriptorDecoder()
     {
         super("StreamIdentifierDescriptorDecoder");
@@ -28,8 +30,7 @@ public class StreamIdentifierDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x52);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public int getComponentTag()

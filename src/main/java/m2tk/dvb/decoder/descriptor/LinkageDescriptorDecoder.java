@@ -20,6 +20,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class LinkageDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x4A;
+
     public LinkageDescriptorDecoder()
     {
         super("LinkageDescriptorDecoder");
@@ -28,7 +30,7 @@ public class LinkageDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return super.isAttachable(target) && target.readUINT8(0) == 0x4A;
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public int getTransportStreamID()

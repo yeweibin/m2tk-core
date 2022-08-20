@@ -20,6 +20,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class ServiceAvailabilityDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x72;
+
     public ServiceAvailabilityDescriptorDecoder()
     {
         super("ServiceAvailabilityDescriptorDecoder");
@@ -28,8 +30,7 @@ public class ServiceAvailabilityDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x72);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public int getAvailabilityFlag()
@@ -40,7 +41,7 @@ public class ServiceAvailabilityDescriptorDecoder extends DescriptorDecoder
     public int[] getCellIDList()
     {
         int[] list = new int[(encoding.size() - 3) / 2];
-        for (int i = 0; i < list.length; i ++)
+        for (int i = 0; i < list.length; i++)
         {
             list[i] = encoding.readUINT16(3 + i * 2);
         }

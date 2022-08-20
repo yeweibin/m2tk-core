@@ -21,6 +21,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class StuffingDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x42;
+
     public StuffingDescriptorDecoder()
     {
         super("StuffingDescriptorDecoder");
@@ -29,7 +31,6 @@ public class StuffingDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x42);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 }

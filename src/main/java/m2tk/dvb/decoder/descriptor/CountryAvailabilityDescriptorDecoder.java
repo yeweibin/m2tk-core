@@ -21,6 +21,8 @@ import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class CountryAvailabilityDescriptorDecoder extends DescriptorDecoder
 {
+    public static final int TAG = 0x49;
+
     public CountryAvailabilityDescriptorDecoder()
     {
         super("CountryAvailabilityDescriptorDecoder");
@@ -29,8 +31,7 @@ public class CountryAvailabilityDescriptorDecoder extends DescriptorDecoder
     @Override
     public boolean isAttachable(Encoding target)
     {
-        return (super.isAttachable(target) &&
-                target.readUINT8(0) == 0x49);
+        return super.isAttachable(target) && target.readUINT8(0) == TAG;
     }
 
     public int getAvailabilityFlag()
@@ -41,7 +42,7 @@ public class CountryAvailabilityDescriptorDecoder extends DescriptorDecoder
     public String[] getCountryCodeList()
     {
         String[] list = new String[(encoding.size() - 3) / 3];
-        for (int i = 0; i < list.length; i ++)
+        for (int i = 0; i < list.length; i++)
         {
             int code = encoding.readUINT24(3 + i * 3);
             list[i] = DVB.decodeThreeLetterCode(code);
