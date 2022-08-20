@@ -15,8 +15,8 @@
  */
 package m2tk.dvb.decoder.descriptor;
 
+import m2tk.dvb.DVB;
 import m2tk.encoding.Encoding;
-import m2tk.mpeg2.MPEG2;
 import m2tk.mpeg2.decoder.DescriptorDecoder;
 
 public class LocalTimeOffsetDescriptorDecoder extends DescriptorDecoder
@@ -40,9 +40,39 @@ public class LocalTimeOffsetDescriptorDecoder extends DescriptorDecoder
         return encoding.readUINT8(1) / BLOCK_SIZE;
     }
 
-    public Encoding getLocalTimeOffsetDescription(int index)
+    public String getCountryCode(int index)
     {
-        int offset = MPEG2.DESCRIPTOR_HEADER_LENGTH + index * BLOCK_SIZE;
-        return encoding.readSelector(offset, BLOCK_SIZE);
+        int offset = 2 + BLOCK_SIZE * index;
+        return DVB.decodeThreeLetterCode(encoding.readUINT24(offset));
+    }
+
+    public int getCountryRegionID(int index)
+    {
+        int offset = 2 + BLOCK_SIZE * index;
+        return (encoding.readUINT8(offset + 3) >> 2) & 0b111111;
+    }
+
+    public int getLocalTimeOffsetPolarity(int index)
+    {
+        int offset = 2 + BLOCK_SIZE * index;
+        return encoding.readUINT8(offset + 3) & 0b1;
+    }
+
+    public int getLocalTimeOffset(int index)
+    {
+        int offset = 2 + BLOCK_SIZE * index;
+        return encoding.readUINT16(offset + 4);
+    }
+
+    public long getTimeOfChange(int index)
+    {
+        int offset = 2 + BLOCK_SIZE * index;
+        return encoding.readUINT40(offset + 6);
+    }
+
+    public int getNextTimeOffset(int index)
+    {
+        int offset = 2 + BLOCK_SIZE * index;
+        return encoding.readUINT16(offset + 11);
     }
 }
