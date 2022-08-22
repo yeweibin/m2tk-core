@@ -220,17 +220,16 @@ public final class DVB
 
     private static LocalDate computeCalendarDateFrom24BitMJD(int mjd)
     {
-        /*
-          从MJD值中还原出年、月、日。
-
-             Y' = int [ (MJD - 15078.2) / 365.25 ]
-             M' = int { [ MJD - 14 956.1 - int (Y' × 365.25) ] / 30.6001 }
-             D = MJD - 14 956 - int (Y' × 365.25) - int (M' × 30.6001)
-             If M' = 14 or M' = 15, then K = 1; else K = 0
-             Y = Y' + K
-             M = M' - 1 - K × 12
-
-           注意：年份从1900开始计算，因此，对于2010年，Y等于110。
+        /* 从MJD值中还原出年、月、日。
+         *
+         *    Y' = int [ (MJD - 15078.2) / 365.25 ]
+         *    M' = int { [ MJD - 14 956.1 - int (Y' × 365.25) ] / 30.6001 }
+         *    D = MJD - 14 956 - int (Y' × 365.25) - int (M' × 30.6001)
+         *    If M' = 14 or M' = 15, then K = 1; else K = 0
+         *    Y = Y' + K
+         *    M = M' - 1 - K × 12
+         *
+         *  注意：年份从1900开始计算，因此，对于2010年，Y等于110。
          */
 
         int y = (int) ((mjd - 15078.2) / 365.25);
@@ -271,8 +270,7 @@ public final class DVB
         return new String(bytes);
     }
 
-    /*
-     * 符合国标（GB/T 28161-2011）要求的字符串编解码器。
+    /* 符合国标（GB/T 28161-2011）要求的字符串编解码器。
      * 注意：国标对 DVB 规范（ETSI EN-300.468）进行了适当的裁剪，省略了部分拉丁字符集。
      *      鉴于国内不规范的编解码方式，“默认字符集”设为 GBK 而非规范中定义的拉丁字符。
      */
