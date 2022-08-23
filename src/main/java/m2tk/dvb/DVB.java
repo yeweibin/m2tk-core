@@ -285,7 +285,6 @@ public final class DVB
             return "";
 
         int first_byte = bytes[offset] & 0xFF;
-
         if (first_byte >= 0x20)
             return construct_string_using_table(bytes, offset, length, TABLE_00);
 
@@ -371,8 +370,9 @@ public final class DVB
         if (first_byte == 0x15)
             return construct_string_safely(bytes, offset + 1, length - 1, "UTF-8");
 
-        // 对于其他字符集，按GBK方式解码。
-        return new String(bytes, offset, length, Charset.forName("GBK"));
+        // 日文编码按照ARIB STD-B24相关规定进行解码，这里暂不支持。
+        // 对其他情况，去掉控制字节，剩余字节使用系统默认字符集解码。
+        return new String(bytes, offset + 1, length - 1);
     }
 
     public static int encodeString(String string, byte[] bytes, int offset)
