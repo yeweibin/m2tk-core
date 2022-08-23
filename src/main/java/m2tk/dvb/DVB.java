@@ -286,7 +286,7 @@ public final class DVB
 
         int first_byte = bytes[offset] & 0xFF;
         if (first_byte >= 0x20)
-            return construct_string_using_table(bytes, offset, length, TABLE_00);
+            return construct_string_safely(bytes, offset, length, "GBK");
 
         if (first_byte == 0x01)
             return construct_string_using_table(bytes, offset + 1, length - 1, TABLE_01_AKA_8859_5);
