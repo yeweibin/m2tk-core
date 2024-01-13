@@ -152,6 +152,48 @@ public final class Encoding
         return BigEndian.getBits(buf, off + position, mask);
     }
 
+    /**
+     * 读取指定位置开始的4位半字节流（Nibble，非负整数）。
+     *
+     * @param position 指定位置
+     * @param length   半字节流长度（注意：是Nibble的个数，不是字节长度）
+     * @return Nibble数组
+     */
+    public int[] readNibbles(int position, int length)
+    {
+        Preconditions.checkFromIndexSize(position, length / 2 + length % 2, len);
+        int[] nibbles = new int[length];
+        int n = (int) (length & 0xFFFFFFFEL);
+        for (int i = 0; i < n; i+=2)
+        {
+            int b = buf[off + position + i / 2] & 0xFF;
+            nibbles[i] = b >>> 4;
+            nibbles[i + 1] = b & 0xF;
+        }
+        if (length != n)
+        {
+            int b = buf[off + position + n / 2] & 0xFF;
+            nibbles[length - 1] = b >>> 4;
+        }
+        return nibbles;
+    }
+
+    /**
+     * 读取指定位置开始的8位字节流（Octet，非负整数）。
+     *
+     * @param position 指定位置
+     * @param length   字节流长度
+     * @return Octet数组
+     */
+    public int[] readOctets(int position, int length)
+    {
+        Preconditions.checkFromIndexSize(position, length, len);
+        int[] octets = new int[length];
+        for (int i = 0; i < length; i++)
+            octets[i] = buf[off + position + i] & 0xFF;
+        return octets;
+    }
+
     public Encoding readSelector(int position)
     {
         Preconditions.checkFromIndexSize(position, len - position, len);
