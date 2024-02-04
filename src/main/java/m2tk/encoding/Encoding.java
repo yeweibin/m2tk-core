@@ -36,6 +36,7 @@ import java.util.Arrays;
  * </ol>
  * 鉴于MPEG-2应用环境，Encoding采用BigEndian字节序。
  */
+@SuppressWarnings("all")
 public final class Encoding
 {
     private byte[] buf;

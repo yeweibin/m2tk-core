@@ -16,6 +16,7 @@
 
 package m2tk.util;
 
+@SuppressWarnings("all")
 public final class LittleEndian
 {
     private LittleEndian() {}

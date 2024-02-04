@@ -18,6 +18,7 @@ package m2tk.util;
 
 import java.util.Arrays;
 
+@SuppressWarnings("all")
 public final class Bytes
 {
     private Bytes() {}

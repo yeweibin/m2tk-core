@@ -15,6 +15,7 @@
  */
 package m2tk.encoding;
 
+@SuppressWarnings("all")
 public class IncorrectEncodingException extends RuntimeException
 {
     public IncorrectEncodingException()

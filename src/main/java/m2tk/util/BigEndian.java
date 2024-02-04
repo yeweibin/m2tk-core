@@ -16,6 +16,7 @@
 
 package m2tk.util;
 
+@SuppressWarnings("all")
 public final class BigEndian
 {
     private BigEndian() {}

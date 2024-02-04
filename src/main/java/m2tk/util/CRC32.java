@@ -20,6 +20,7 @@ package m2tk.util;
  * An implementation of CRC32 algorithm (fast version)
  *
  */
+@SuppressWarnings("all")
 public final class CRC32
 {
     private CRC32() {}
@@ -52,14 +53,14 @@ public final class CRC32
         for (int i = 0; i < length; i++)
         {
             idx = (byte) ((crc >>> 24) ^ data[offset + i] & 0xFF);
-            crc = (crc << 8) ^ CRCTABLE[(idx & 0xFF)];
+            crc = (crc << 8) ^ CRC_TABLE[(idx & 0xFF)];
         }
         crc = crc & 0xFFFFFFFFL;
 
         return crc;
     }
 
-    public static final long[] CRCTABLE =
+    public static final long[] CRC_TABLE =
     {
         0x00000000L, 0x04C11DB7L, 0x09823B6EL, 0x0D4326D9L,
         0x130476DCL, 0x17C56B6BL, 0x1A864DB2L, 0x1E475005L,
