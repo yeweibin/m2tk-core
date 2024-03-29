@@ -20,21 +20,21 @@ public class Preconditions
 {
     private Preconditions() {}
 
-    public static void checkIndex(int index, int length)
+    public static void checkIndex(int index, int limit)
     {
-        if (index < 0 || index >= length)
-            throw new IndexOutOfBoundsException(String.format("index: %d, length: %d", index, length));
+        if (index < 0 || index >= limit)
+            throw new IndexOutOfBoundsException(String.format("index: %d, limit: %d", index, limit));
     }
 
-    public static void checkFromToIndex(int fromIndex, int toIndex, int length)
+    public static void checkFromToIndex(int fromIndex, int toIndex, int limit)
     {
-        if (fromIndex < 0 || fromIndex > toIndex || toIndex > length)
-            throw new IndexOutOfBoundsException(String.format("fromIndex: %d, toIndex: %d, length: %d", fromIndex, toIndex, length));
+        if (fromIndex < 0 || fromIndex > toIndex || toIndex > limit)
+            throw new IndexOutOfBoundsException(String.format("fromIndex: %d, toIndex: %d, limit: %d", fromIndex, toIndex, limit));
     }
 
-    public static void checkFromIndexSize(int fromIndex, int size, int length)
+    public static void checkFromIndexSize(int fromIndex, int size, int limit)
     {
-        if ((length | fromIndex | size) < 0 || size > length - fromIndex)
-            throw new IndexOutOfBoundsException(String.format("fromIndex: %d, size: %d, length: %d", fromIndex, size, length));
+        if ((limit | fromIndex | size) < 0 || size > limit - fromIndex)
+            throw new IndexOutOfBoundsException(String.format("fromIndex: %d, size: %d, limit: %d", fromIndex, size, limit));
     }
 }
