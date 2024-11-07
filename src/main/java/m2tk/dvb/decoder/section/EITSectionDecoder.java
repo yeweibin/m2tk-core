@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Ye Weibin. All rights reserved.
+ * Copyright (c) M2TK Project. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package m2tk.dvb.decoder.section;
 import m2tk.encoding.Encoding;
 import m2tk.mpeg2.MPEG2;
 import m2tk.mpeg2.decoder.ExtendedSectionDecoder;
-import m2tk.mpeg2.decoder.PSISectionDecoder;
 
 import java.util.ArrayList;
 import java.util.Objects;
