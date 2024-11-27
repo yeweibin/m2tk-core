@@ -139,7 +139,7 @@ public final class DVB
 
     public static long encodeTimepointFromOffsetDateTime(OffsetDateTime datetime)
     {
-        LocalDateTime utcDateTime = datetime.atZoneSameInstant(ZoneId.of("UTC"))
+        LocalDateTime utcDateTime = datetime.atZoneSameInstant(ZoneOffset.UTC)
                                             .toLocalDateTime();
         long mjd = encodeDate(utcDateTime.toLocalDate());
         long utc = encodeTime(utcDateTime.toLocalTime());
@@ -149,7 +149,7 @@ public final class DVB
     public static long encodeTimepointFromLocalDateTime(LocalDateTime datetime)
     {
         LocalDateTime utcDateTime = ZonedDateTime.of(datetime, ZoneId.systemDefault())
-                                                 .withZoneSameInstant(ZoneId.of("UTC"))
+                                                 .withZoneSameInstant(ZoneOffset.UTC)
                                                  .toLocalDateTime();
         long mjd = encodeDate(utcDateTime.toLocalDate());
         long utc = encodeTime(utcDateTime.toLocalTime());
@@ -164,7 +164,7 @@ public final class DVB
 
         LocalDate date = decodeDate(mjd);
         LocalTime time = decodeTime(utc);
-        return ZonedDateTime.of(date, time, ZoneId.of("UTC"))
+        return ZonedDateTime.of(date, time, ZoneOffset.UTC)
                             .withZoneSameInstant(ZoneId.systemDefault())
                             .toOffsetDateTime();
     }
@@ -177,7 +177,7 @@ public final class DVB
 
         LocalDate date = decodeDate(mjd);
         LocalTime time = decodeTime(utc);
-        return ZonedDateTime.of(date, time, ZoneId.of("UTC"))
+        return ZonedDateTime.of(date, time, ZoneOffset.UTC)
                             .withZoneSameInstant(ZoneId.systemDefault())
                             .toLocalDateTime();
     }
