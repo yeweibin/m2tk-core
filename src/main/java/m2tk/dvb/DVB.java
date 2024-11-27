@@ -164,9 +164,7 @@ public final class DVB
 
         LocalDate date = decodeDate(mjd);
         LocalTime time = decodeTime(utc);
-        return ZonedDateTime.of(date, time, ZoneOffset.UTC)
-                            .withZoneSameInstant(ZoneId.systemDefault())
-                            .toOffsetDateTime();
+        return OffsetDateTime.of(date, time, ZoneOffset.UTC);
     }
 
     public static LocalDateTime decodeTimepointIntoLocalDateTime(long timepoint)
@@ -177,9 +175,9 @@ public final class DVB
 
         LocalDate date = decodeDate(mjd);
         LocalTime time = decodeTime(utc);
-        return ZonedDateTime.of(date, time, ZoneOffset.UTC)
-                            .withZoneSameInstant(ZoneId.systemDefault())
-                            .toLocalDateTime();
+        return OffsetDateTime.of(date, time, ZoneOffset.UTC)
+                             .atZoneSameInstant(ZoneId.systemDefault())
+                             .toLocalDateTime();
     }
 
     public static String printTimeFields(int fields)
