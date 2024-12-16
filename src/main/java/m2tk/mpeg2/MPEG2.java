@@ -63,8 +63,6 @@ public final class MPEG2
     public static final int MIN_PRIVATE_SECTION_PAYLOAD_LENGTH = 0;
     public static final int MAX_PRIVATE_SECTION_PAYLOAD_LENGTH = 4093;
     public static final int PES_PACKET_HEADER_LENGTH = 6;
-    public static final int MAX_PES_PACKET_DATA_LENGTH = 65535; // 2^16 - 1
-    public static final int MAX_PES_PACKET_LENGTH = PES_PACKET_HEADER_LENGTH + MAX_PES_PACKET_DATA_LENGTH;
 
     public static final int USER_PRIVATE_STREAM_TYPE = 0x80;
     public static final int MIN_TABLE_ID = 0x00;
